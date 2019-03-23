@@ -1,4 +1,4 @@
-import ftplib
+﻿import ftplib
 import time
 import os
 #definir comandos
@@ -12,6 +12,10 @@ def comandos():
             print("       ls: enlista contenido de directorio")
             print("       put: sube archivos a servidor")
             print("       get: baja archivo de servidor")
+            print("       mget: baja archivos en masa")
+            print("       mkdir: crea nueva carpeta")
+            print("       delete: borra ficheros de directorio")
+            print("       rm: borra carpetas")
             print("       bye: cierra conexion")
             print("")
             print("=================================================")
@@ -27,21 +31,48 @@ def comandos():
                         if opc=="put":
                             filename=input("(file name)")
                             f = open(filename, 'rb')
-                            
+                            print("uploading...")
+                            ftp.storbinary('STOR ' + filename, f)
                             f.close()
                         else:
                             if opc=="get":
                                 filename=input("(file name)")
+                                print("downloading...")
                                 ftp.retrbinary('RETR '+filename, open(filename, 'wb').write)
                             else:
-                                if opc=="bye":
-                                    ftp.close()
-                                    break
+                                if opc=="mget":
+                                    filenames = ftp.nlst()
+                                    print("downloading...")
+                                    for filename in filenames:
+                                        local_filename = './' + "'" + filename + "'"
+                                        file = open(local_filename, 'wb')
+                                        ftp.retrbinary('RETR '+ filename, file.write)
+                                    archivos = os.listdir(".")
+                                    for archivo in archivos:
+                                        new = archivo.replace("'", "")
+                                        nombre = new.replace(" ", "_")
+                                        os.rename(archivo, nombre)
                                 else:
-                                    print(opc,"No es un comando elegible")
+                                    if opc=="delete":
+                                        file = input("(file name)")
+                                        ftp.delete(file)
+                                    else:
+                                        if opc=="rm":
+                                            directorio = input("(directorio)")
+                                            ftp.rmd(directorio)
+                                        else:
+                                            if opc=="mkdir":
+                                                directorio = input("(nombre de nuevo directorio)")
+                                                ftp.mkd(directorio)
+                                            else:
+                                                if opc=="bye":
+                                                    file.close()
+                                                    break
+                                                else:
+                                                    print(opc,"No es un comando elegible")
         except:
             print("no hay conexion")
-            ftp.login(user,pasd)
+            ftp.login(nickwite,BEto123321)
 
 #Menu de inicio
 print("==================Conectar_FTP===================")
@@ -68,3 +99,4 @@ except:
     #Problema al acceder a servidor
     print("=================================================")
     print("Hubo un error. Asegurate que ayas escrito bien el servidor")
+

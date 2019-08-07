@@ -136,24 +136,24 @@ def comandos():
 			ftp.login(user, pasd)
 			comandos()
 		except:
-			#Usuario o contraseña incorrectos
 			print("Conexion cerrada")
-
-host = sys.argv[1]
+try:
+	host = sys.argv[1]
+except:
+	host = input("direccion del servidor: ")
 try:
     ftp = ftplib.FTP(host)
-    #Si se pudo conectar al servidor
-    user = sys.argv[2]
+    try:
+    	user = sys.argv[2]
+    except:
+    	user = input("Nombre de usuario: ")
     pasd = getpass.getpass("Contraseña: ")
     try:
         ftp.login(user, pasd)
-        #Si se pudo acceder con excito
         print("[OK]")
         command()
         comandos()
     except:
-        #Usuario o contraseña incorrectos
         print("### Usuario o contraseña incorrecta ###")
 except:
-    #Problema al acceder a servidor
     print("### [ERROR] Sintaxis FT.py [HOST] [USER] ###")

@@ -150,7 +150,6 @@ try:
     pasd = getpass.getpass("Contraseña: ")
     try:
         ftp.login(user, pasd)
-        print("[OK]")
         command()
         comandos()
     except:

@@ -5,20 +5,21 @@ import sys
 import os
 
 def command():
-	print("=================================================")
+	print("**********************************************")
 	print("          Comandos que puedes usar: ")
 	print("")
 	print(" cd:     coloca en un directorio")
-	print(" ls:     enlista contenido de directorio")
+	print(" ls:     lista contenido de directorio")
 	print(" put:    sube archivos a servidor")
 	print(" get:    baja archivo de servidor")
-	print(" mget:   baja archivos en masa")
+	print(" mget:   baja todos los archivos de un folder")
 	print(" mkdir:  crea nueva carpeta")
 	print(" delete: borra ficheros de directorio")
 	print(" rm:     borra carpetas")
+	print(" more:   leer contenido de archivos de texto")
 	print(" bye:    cierra conexion")
 	print("")
-	print("=================================================")
+	print("**********************************************")
 
 def comandos():
 	try:
@@ -128,8 +129,37 @@ def comandos():
 														print("Este comando no es compatible")
 													comandos()
 												else:
-													print(opc," No es un comando elegible")
-													comandos()
+													if opc=="more" or opc=="read" or opc=="read":
+														try:
+															filename = intro[1]
+														except:
+															filename = input("(file name) ")
+														try:
+															try:
+																filename = intro[1]
+															except:
+																filename = input("(file name) ")
+															
+															# Descargar
+															try:
+																ftp.retrbinary('RETR '+filename, open('more.tmp', 'wb').write)
+															except:
+																print("No se encontro un archivo con este nombre")
+
+															# Leer
+															f = open('more.tmp','r')
+															mensaje = f.read()
+															# Imprimir
+															print(mensaje)
+															f.close()
+															# Borrar
+															os.remove("more.tmp")
+														except:
+															print("No se encontro un archivo con este nombre")
+														comandos()
+													else:
+														print(opc," No es un comando elegible")
+														comandos()
 	except:
 		print("no hay conexion")
 		try:
